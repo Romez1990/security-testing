@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import BaseLayout from './BaseLayout';
+import AppBar from '../components/AppBar';
 
 interface Props {
   title?: string;
@@ -9,6 +10,7 @@ interface Props {
 function MainLayout({ title, children }: Props) {
   return (
     <BaseLayout title={title}>
+      <AppBar />
       {children}
     </BaseLayout>
   );
