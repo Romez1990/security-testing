@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppContext } from 'next/app';
 import { NextComponentType } from 'next/dist/next-server/lib/utils';
+import ThemeProvider from '../components/app/ThemeProvider';
 
 interface InitialProps {
   pageProps: object;
@@ -22,9 +23,17 @@ App.getInitialProps = async ({ Component, ctx }: AppContext): Promise<InitialPro
 };
 
 function App({ Component, pageProps }: Props): JSX.Element {
+  useEffect((): void => {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles === null) return;
+    jssStyles.remove();
+  }, []);
+
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <Component {...pageProps} />
+    <ThemeProvider>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <Component {...pageProps} />
+    </ThemeProvider>
   );
 }
 
