@@ -16,6 +16,17 @@ const useStyles = makeStyles(({ spacing }: Theme) => createStyles({
   },
 }));
 
+// index is question index, value is index of answer
+const answers: string[] = [];
+
+function getAnswer(questionIndex: number) {
+  return answers[questionIndex] ?? 'null';
+}
+
+function saveAnswer(questionIndex: number, answerIndex: string) {
+  answers[questionIndex] = answerIndex;
+}
+
 function Stepper() {
   const [activeStep, setActiveStep] = useState(0);
   const [answer, setAnswer] = useState<string>('null');
@@ -24,13 +35,25 @@ function Stepper() {
 
   function nextStep() {
     setActiveStep(activeStep => {
-      setAnswer('null');
-      return ++activeStep;
+      const nextStep = activeStep + 1;
+      saveAnswerAndGetNext(nextStep);
+      return nextStep;
     });
   }
 
   function previousStep() {
-    setActiveStep(activeStep => --activeStep);
+    setActiveStep(activeStep => {
+      const previousStep = activeStep - 1;
+      saveAnswerAndGetNext(previousStep);
+      return previousStep;
+    });
+  }
+
+  function saveAnswerAndGetNext(nextStep: number) {
+    setAnswer(answer => {
+      saveAnswer(activeStep, answer);
+      return getAnswer(nextStep);
+    });
   }
 
   const classes = useStyles();
