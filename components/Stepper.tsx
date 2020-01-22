@@ -7,6 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import Step from './Step';
 import questions from '../data/questions.json';
 
+interface Props {
+  onResult(result: number): void;
+}
+
 const useStyles = makeStyles(({ spacing }: Theme) => createStyles({
   buttons: {
     marginBottom: spacing(2),
@@ -27,7 +31,19 @@ function saveAnswer(questionIndex: number, answerIndex: string) {
   answers[questionIndex] = answerIndex;
 }
 
-function Stepper() {
+function getResult() {
+  let totalValue = 0;
+  for (let i = 0; i < questions.length; ++i) {
+    const question = questions[i];
+    const answerIndex = answers[i];
+    const answer = question.answers[parseInt(answerIndex)];
+    totalValue += answer.value;
+  }
+  const maxTotalValue = questions.length * 10;
+  return totalValue / maxTotalValue;
+}
+
+function Stepper({ onResult }: Props) {
   const [activeStep, setActiveStep] = useState(0);
   const [answer, setAnswer] = useState<string>('null');
 
@@ -36,6 +52,10 @@ function Stepper() {
   function nextStep() {
     setActiveStep(activeStep => {
       const nextStep = activeStep + 1;
+      if (nextStep === questions.length) {
+        onResult(getResult());
+        return activeStep;
+      }
       saveAnswerAndGetNext(nextStep);
       return nextStep;
     });
