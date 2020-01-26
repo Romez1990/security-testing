@@ -1,18 +1,33 @@
 import React from 'react';
-import App from 'next/app';
+import App, { AppContext } from 'next/app';
+import { Store } from 'redux';
+import { Provider } from 'react-redux';
+import withRedux from 'next-redux-wrapper';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import initStore from '../store/store';
 import theme from '../src/theme';
 
-class MyApp extends App {
+interface Props {
+  store: Store;
+}
+
+class MyApp extends App<Props> {
+  static async getInitialProps({ Component, ctx }: AppContext) {
+    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
+    return { pageProps };
+  }
+
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, store } = this.props;
 
     return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </Provider>
     );
   }
 
@@ -22,4 +37,4 @@ class MyApp extends App {
   }
 }
 
-export default MyApp;
+export default withRedux(initStore)(MyApp);
