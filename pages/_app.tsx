@@ -16,6 +16,7 @@ interface Props extends InitialProps {
 
 App.getInitialProps = async ({ Component, ctx }: AppContext): Promise<InitialProps> => {
   if (!process.browser) {
+    store.profileStore.readDarkMode(ctx.req);
   }
 
   const pageProps =
