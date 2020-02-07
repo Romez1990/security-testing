@@ -1,4 +1,8 @@
 import React, { ReactNode } from 'react';
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
+import { Theme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import BaseLayout from './BaseLayout';
 import AppBar from '../components/layout/AppBar';
 
@@ -7,11 +11,21 @@ interface Props {
   children: ReactNode;
 }
 
+const useStyles = makeStyles(({ spacing }: Theme) => createStyles({
+  container: {
+    marginTop: spacing(3),
+  },
+}));
+
 function MainLayout({ title, children }: Props): JSX.Element {
+  const classes = useStyles();
+
   return (
     <BaseLayout title={title}>
       <AppBar />
-      {children}
+      <Container className={classes.container} maxWidth="md">
+        {children}
+      </Container>
     </BaseLayout>
   );
 }
