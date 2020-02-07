@@ -5,6 +5,7 @@ import MuiAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import ThemeChanger from './ThemeChanger';
 
 const useStyles = makeStyles(() => createStyles({
   title: {
@@ -25,6 +26,7 @@ function AppBar(): JSX.Element {
             Тестирование Безопасности
           </Typography>
         </Container>
+        <ThemeChanger />
       </Toolbar>
     </MuiAppBar>
   );
