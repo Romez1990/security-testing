@@ -25,7 +25,14 @@ function Stepper(): JSX.Element {
     testingStore.previousQuestion();
   }
 
-  function nextQuestion(): void {
+  const router = useRouter();
+
+  async function nextQuestion(): Promise<void> {
+    if (testingStore.activeQuestionIndex === testingStore.questions.length - 1) {
+      await router.push('/results');
+      return;
+    }
+
     testingStore.nextQuestion();
   }
 
