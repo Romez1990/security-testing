@@ -5,7 +5,7 @@
     "jsx": "preserve",
     "lib": [
       "dom",
-      "es2017"
+      "esnext"
     ],
     "baseUrl": ".",
     "moduleResolution": "node",
