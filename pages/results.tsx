@@ -1,11 +1,13 @@
 import React from 'react';
-import Results from '../components/results/Results';
 import MainLayout from '../layouts/MainLayout';
+import Results from '../components/results/Results';
+import Column from '../components/results/Column';
 
 function ResultsPage(): JSX.Element {
   return (
     <MainLayout>
-      <Results />
+      {/*<Results />*/}
+      <Column />
     </MainLayout>
   );
 }

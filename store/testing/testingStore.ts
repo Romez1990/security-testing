@@ -1,7 +1,11 @@
 import { observable, action } from 'mobx';
 import average from '../../src/utils/average';
 import questions from '../../data/questions.json';
+import categories from '../../data/categories.json';
 import Question, { QuestionInit } from '../../types/Question';
+import Category from '../../types/Category';
+
+type CategoriesToQuestions = { [key: string]: Question[] };
 
 class TestingStore {
   @observable questions: Question[] =
@@ -36,8 +40,30 @@ class TestingStore {
     return this.questions[this.activeQuestionIndex];
   }
 
-  getResult(): number {
-    return average(this.questions, TestingStore.questionsReducer);
+  get results(): Map<Category, number> {
+    const categoriesToQuestions = this.questions.reduce<CategoriesToQuestions>(
+      (categories: CategoriesToQuestions, question: Question) => {
+        if (!(question.category in categories))
+          categories[question.category] = [];
+        categories[question.category].push(question);
+        return categories;
+      },
+      {},
+    );
+    const results = new Map<Category, number>();
+    Object.entries(categoriesToQuestions).forEach(
+      (entry: [string, Question[]]): void => {
+        const categoryName = entry[0];
+        const questions = entry[1];
+        const category = categories.find(
+          (category: Category): boolean => category.name === categoryName,
+        );
+        if (typeof category === 'undefined')
+          throw new Error(`category ${categoryName} not found`);
+        results.set(category, average(questions, TestingStore.questionsReducer));
+      },
+    );
+    return results;
   }
 
   static questionsReducer(total: number, question: Question): number {
