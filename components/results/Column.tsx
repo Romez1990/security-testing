@@ -35,6 +35,11 @@ function Column(): JSX.Element {
     credits: {
       enabled: false,
     },
+    accessibility: {
+      point: {
+        valueSuffix: '%'
+      }
+    },
     plotOptions: {
       column: {
         depth: 80,
