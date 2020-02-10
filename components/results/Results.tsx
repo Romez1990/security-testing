@@ -7,8 +7,6 @@ import useTestingStore from '../../store/testing/useTestingStore';
 function Results(): JSX.Element {
   const testingStore = useTestingStore();
 
-  const results = testingStore.getResult();
-
   function toPercent(number: number): string {
     const percent = Math.round(number * 100);
     return `${percent}%`;
@@ -25,7 +23,7 @@ function Results(): JSX.Element {
     <div>
       <Typography>
         Уровень безопасности вашей организации составляет:
-        {Object.entries(results).map((entry: [string, number]): JSX.Element => {
+        {Object.entries(testingStore.results).map((entry: [string, number]): JSX.Element => {
           const category = entry[0];
           const value = entry[1];
           return (
