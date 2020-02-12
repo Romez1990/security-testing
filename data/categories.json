@@ -1,18 +1,17 @@
-[
-  {
-    "name": "category1",
-    "title": "Категория 1"
+{
+  "confidentiality": {
+    "title": "Угрозы конфиденциальности"
   },
-  {
-    "name": "category2",
-    "title": "Категория 2"
+  "authentication": {
+    "title": "Угрозы аутентификации"
   },
-  {
-    "name": "category3",
-    "title": "Категория 3"
+  "authorized_access": {
+    "title": "Угрозы несанкционированного доступа"
   },
-  {
-    "name": "category4",
-    "title": "Категория 4"
+  "data_loss": {
+    "title": "Угрозы потери данных"
+  },
+  "out_of_date": {
+    "title": "Угрозы, связанные с уязвимости старый версий программного обеспечения"
   }
-]
+}

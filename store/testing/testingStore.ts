@@ -1,4 +1,6 @@
+import { IncomingMessage } from 'http';
 import { observable, action } from 'mobx';
+import { getCookie, setCookie } from '../../src/coookies';
 import average from '../../src/utils/average';
 import questions from '../../data/questions.json';
 import categories from '../../data/categories.json';
@@ -7,16 +9,37 @@ import Category from '../../types/Category';
 
 type CategoriesToQuestions = { [key: string]: Question[] };
 
+const fillAnswers = (question: QuestionInit): Question => ({
+  ...question,
+  selectedAnswer: '-1',
+});
+
 class TestingStore {
-  @observable questions: Question[] =
-    questions.questions.map((question: QuestionInit): Question => ({
-      ...question,
-      selectedAnswer: '-1',
-    }));
+  @observable questions: Question[] = questions.questions.map(fillAnswers);
+
+  @action
+  setQuestions(questions: Question[]): void {
+    this.questions = questions;
+  }
 
   @action
   setAnswer(answer: string): void {
     this.questions[this.activeQuestionIndex].selectedAnswer = answer;
+    this.saveQuestions();
+  }
+
+  saveQuestions(): void {
+    const questionsJson = JSON.stringify(this.questions);
+    setCookie('questions', questionsJson);
+  }
+
+  @action
+  load(req?: IncomingMessage): void {
+    const questionsJson = getCookie('questions', req);
+    this.questions =
+      typeof questionsJson !== 'undefined'
+        ? JSON.parse(questionsJson)
+        : questions.questions.map(fillAnswers);
   }
 
   @observable activeQuestionIndex = 0;
@@ -55,9 +78,7 @@ class TestingStore {
       (entry: [string, Question[]]): void => {
         const categoryName = entry[0];
         const questions = entry[1];
-        const category = categories.find(
-          (category: Category): boolean => category.name === categoryName,
-        );
+        const category = (categories as any)[categoryName];
         if (typeof category === 'undefined')
           throw new Error(`category ${categoryName} not found`);
         results.set(category, average(questions, TestingStore.questionsReducer));
@@ -82,6 +103,7 @@ class TestingStore {
 
   hydrate(testingStore: TestingStore): void {
     this.setActiveQuestionIndex(testingStore.activeQuestionIndex);
+    this.setQuestions(testingStore.questions);
   }
 }
 

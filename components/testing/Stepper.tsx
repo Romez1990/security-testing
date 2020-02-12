@@ -13,8 +13,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => createStyles({
   buttons: {
     marginBottom: spacing(2),
   },
-  button: {
-    marginRight: spacing(1),
+  elements: {
+    marginRight: spacing(2),
   },
 }));
 
@@ -42,14 +42,17 @@ function Stepper(): JSX.Element {
     <Fragment>
       <div className={classes.buttons}>
         <Button
-          className={classes.button}
+          className={classes.elements}
           disabled={testingStore.activeQuestionIndex === 0}
           onClick={previousQuestion}
         >
           Назад
         </Button>
+        <Typography className={classes.elements} display="inline">
+          {testingStore.activeQuestionIndex + 1}/{testingStore.questions.length}
+        </Typography>
         <Button
-          className={classes.button}
+          className={classes.elements}
           variant="contained"
           color="primary"
           disabled={testingStore.activeQuestion.selectedAnswer === '-1'}
@@ -59,9 +62,6 @@ function Stepper(): JSX.Element {
             ? 'Завершить'
             : 'Вперёд'}
         </Button>
-        <Typography display="inline">
-          {testingStore.activeQuestionIndex + 1}/{testingStore.questions.length}
-        </Typography>
       </div>
       <Step />
     </Fragment>
