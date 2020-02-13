@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import makeStyles from '@material-ui/styles/makeStyles';
 import { Theme } from '@material-ui/core/styles';
@@ -16,6 +16,23 @@ const useStyles = makeStyles(({ spacing }: Theme) => createStyles({
 function IndexPage(): JSX.Element {
   const router = useRouter();
 
+  async function start(): Promise<void> {
+    await router.push('/testing');
+  }
+
+  useEffect((): () => void => {
+    document.addEventListener('keyup', onKeyPress);
+    return (): void => document.removeEventListener('keyup', onKeyPress);
+  }, []);
+
+  async function onKeyPress(e: KeyboardEvent): Promise<void> {
+    switch (e.key) {
+      case 'Enter':
+        await start();
+        break;
+    }
+  }
+
   const classes = useStyles();
 
   return (
@@ -25,7 +42,7 @@ function IndexPage(): JSX.Element {
         className={classes.button}
         variant="contained"
         color="primary"
-        onClick={(): Promise<boolean> => router.push('/testing')}
+        onClick={start}
       >
         Начать тестирование
       </Button>

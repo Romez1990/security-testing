@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { useRouter } from 'next/router'
+import React, { Fragment, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { observer } from 'mobx-react-lite';
 import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
@@ -22,18 +22,38 @@ function Stepper(): JSX.Element {
   const testingStore = useTestingStore();
 
   function previousQuestion(): void {
+    if (testingStore.activeQuestionIndex === 0) return;
+
     testingStore.previousQuestion();
   }
 
   const router = useRouter();
 
   async function nextQuestion(): Promise<void> {
+    if (testingStore.activeQuestion.selectedAnswer === '-1') return;
+
     if (testingStore.activeQuestionIndex === testingStore.questions.length - 1) {
       await router.push('/results');
       return;
     }
 
     testingStore.nextQuestion();
+  }
+
+  useEffect((): () => void => {
+    document.addEventListener('keyup', onKeyPress);
+    return (): void => document.removeEventListener('keyup', onKeyPress);
+  }, []);
+
+  async function onKeyPress(e: KeyboardEvent): Promise<void> {
+    switch (e.key) {
+      case 'Enter':
+        await nextQuestion();
+        break;
+      case 'Backspace':
+        previousQuestion();
+        break;
+    }
   }
 
   const classes = useStyles();
