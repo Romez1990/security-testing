@@ -29,7 +29,10 @@ function Pie(): JSX.Element {
       }
     },
     title: {
-      text: 'Отношение информационных угроз'
+      text: 'Отношение уровней информационных угроз'
+    },
+    credits: {
+      enabled: false,
     },
     accessibility: {
       point: {
