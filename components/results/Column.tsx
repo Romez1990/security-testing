@@ -35,15 +35,18 @@ function Column(): JSX.Element {
     credits: {
       enabled: false,
     },
+    plotOptions: {
+      column: {
+        depth: 80,
+      },
+    },
     accessibility: {
       point: {
         valueSuffix: '%'
       }
     },
-    plotOptions: {
-      column: {
-        depth: 80,
-      },
+    tooltip: {
+      pointFormat: 'Уровень: <b>{point.y}%</b>'
     },
     legend: {
       enabled: false,

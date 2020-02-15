@@ -40,7 +40,7 @@ function Pie(): JSX.Element {
       }
     },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      pointFormat: 'Составляет: <b>{point.percentage:.1f}%</b>'
     },
     plotOptions: {
       pie: {
@@ -55,7 +55,6 @@ function Pie(): JSX.Element {
     },
     series: [{
       type: 'pie',
-      name: 'Browser share',
       data,
     }]
   };
