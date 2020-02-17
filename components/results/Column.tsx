@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Highcharts, { Options } from 'highcharts';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import HighchartsReact from 'highcharts-react-official';
@@ -71,7 +71,79 @@ function Column(): JSX.Element {
     ],
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
+  const chartRef = React.createRef<HighchartsReact>();
+
+  useEffect((): void => {
+    if (chartRef.current === null) return;
+    const container = chartRef.current.container.current;
+    const { chart } = chartRef.current;
+    const chartOptionsComplete = chart.options.chart;
+    if (container === null) return;
+
+    container.addEventListener('mousedown', dragStart);
+    container.addEventListener('touchstart', dragStart);
+
+    function dragStart(eStartInit: MouseEvent | TouchEvent): void {
+      if (
+        typeof chartOptionsComplete === 'undefined' ||
+        typeof chartOptionsComplete.options3d === 'undefined'
+      )
+        return;
+
+      // setColumnOptions();
+      const eStart = chart.pointer.normalize(eStartInit as any);
+
+      const posX = eStart.chartX;
+      const posY = eStart.chartY;
+      const { alpha, beta } = chartOptionsComplete.options3d;
+      const sensitivity = 5; // lower is more sensitive
+      const handlers: any[] = [];
+
+      if (typeof alpha === 'undefined' || typeof beta === 'undefined') return;
+
+      function drag(eInit: MouseEvent): void {
+        // Get e.chartX and e.chartY
+        const e = chart.pointer.normalize(eInit as any);
+
+        chart.update(
+          {
+            chart: {
+              options3d: {
+                alpha: (alpha as any) + (e.chartY - posY) / sensitivity,
+                beta: (beta as any) + (posX - e.chartX) / sensitivity,
+              },
+            },
+          },
+          undefined,
+          undefined,
+          false,
+        );
+      }
+
+      function unbindAll(): void {
+        handlers.forEach(unbind => {
+          if (unbind) {
+            unbind();
+          }
+        });
+        handlers.length = 0;
+      }
+
+      handlers.push(Highcharts.addEvent(document, 'mousemove', drag));
+      handlers.push(Highcharts.addEvent(document, 'touchmove', drag));
+
+      handlers.push(Highcharts.addEvent(document, 'mouseup', unbindAll));
+      handlers.push(Highcharts.addEvent(document, 'touchend', unbindAll));
+    }
+  }, []);
+
+  return (
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={chartOptions}
+      ref={chartRef}
+    />
+  );
 }
 
 export default Column;
