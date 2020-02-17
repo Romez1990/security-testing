@@ -20,7 +20,7 @@ function Column(): JSX.Element {
     testingStore.results.values(),
   ).map((value: number): number => Math.round(value * 100));
 
-  const columnOptions: Options = {
+  const chartOptions: Options = {
     chart: {
       type: 'column',
       options3d: {
@@ -71,7 +71,7 @@ function Column(): JSX.Element {
     ],
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={columnOptions} />;
+  return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
 }
 
 export default Column;

@@ -12,35 +12,36 @@ if (typeof Highcharts === 'object') {
 function Pie(): JSX.Element {
   const testingStore = useTestingStore();
 
-  const data = Array.from(testingStore.results.entries())
-    .map((entry: [Category, number]): [string, number] => {
+  const data = Array.from(testingStore.results.entries()).map(
+    (entry: [Category, number]): [string, number] => {
       const category = entry[0];
       const value = entry[1];
-      return [category.title, value]
-    });
+      return [category.title, value];
+    },
+  );
 
-  const columnOptions: Options = {
+  const chartOptions: Options = {
     chart: {
       type: 'pie',
       options3d: {
         enabled: true,
         alpha: 45,
-        beta: 0
-      }
+        beta: 0,
+      },
     },
     title: {
-      text: 'Отношение уровней информационных угроз'
+      text: 'Отношение уровней информационных угроз',
     },
     credits: {
       enabled: false,
     },
     accessibility: {
       point: {
-        valueSuffix: '%'
-      }
+        valueSuffix: '%',
+      },
     },
     tooltip: {
-      pointFormat: 'Составляет: <b>{point.percentage:.1f}%</b>'
+      pointFormat: 'Составляет: <b>{point.percentage:.1f}%</b>',
     },
     plotOptions: {
       pie: {
@@ -49,22 +50,19 @@ function Pie(): JSX.Element {
         depth: 35,
         dataLabels: {
           enabled: true,
-          format: '{point.name}'
-        }
-      }
+          format: '{point.name}',
+        },
+      },
     },
-    series: [{
-      type: 'pie',
-      data,
-    }]
+    series: [
+      {
+        type: 'pie',
+        data,
+      },
+    ],
   };
 
-  return (
-    <HighchartsReact
-      highcharts={Highcharts}
-      options={columnOptions}
-    />
-  );
+  return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
 }
 
 export default Pie;
