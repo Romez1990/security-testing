@@ -12,11 +12,13 @@ if (typeof Highcharts === 'object') {
 function Column(): JSX.Element {
   const testingStore = useTestingStore();
 
-  const categories = Array.from(testingStore.results.keys())
-    .map((category: Category): string => category.title);
+  const categories = Array.from(testingStore.results.keys()).map(
+    (category: Category): string => category.title,
+  );
 
-  const data = Array.from(testingStore.results.values())
-    .map((value: number): number => Math.round(value * 100));
+  const data = Array.from(
+    testingStore.results.values(),
+  ).map((value: number): number => Math.round(value * 100));
 
   const columnOptions: Options = {
     chart: {
@@ -42,11 +44,11 @@ function Column(): JSX.Element {
     },
     accessibility: {
       point: {
-        valueSuffix: '%'
-      }
+        valueSuffix: '%',
+      },
     },
     tooltip: {
-      pointFormat: 'Уровень: <b>{point.y}%</b>'
+      pointFormat: 'Уровень: <b>{point.y}%</b>',
     },
     legend: {
       enabled: false,
@@ -58,24 +60,18 @@ function Column(): JSX.Element {
       title: {
         text: 'Уровень угрозы',
       },
-      units: [[
-        'percents',
-        [25, 50, 75, 100],
-      ]],
+      units: [['percents', [25, 50, 75, 100]]],
     },
-    series: [{
-      type: 'column',
-      data,
-      colorByPoint: true,
-    }],
+    series: [
+      {
+        type: 'column',
+        data,
+        colorByPoint: true,
+      },
+    ],
   };
 
-  return (
-    <HighchartsReact
-      highcharts={Highcharts}
-      options={columnOptions}
-    />
-  );
+  return <HighchartsReact highcharts={Highcharts} options={columnOptions} />;
 }
 
 export default Column;
